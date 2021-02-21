@@ -14,6 +14,9 @@ class AuctionSniperTest {
   @Mock
   private SniperListener sniperListener;
 
+  @Mock
+  private Auction auction;
+
   @InjectMocks
   private AuctionSniper sniper;
 
@@ -22,5 +25,16 @@ class AuctionSniperTest {
     sniper.auctionClosed();
 
     verify(sniperListener, times(1)).sniperLost();
+  }
+
+  @Test
+  void bids_higher_and_reports_bidding_when_new_price_arrives() {
+    final int price = 1001;
+    final int increment = 25;
+
+    sniper.currentPrice(price, increment);
+
+    verify(auction, times(1)).bid(price + increment);
+    verify(sniperListener, atLeastOnce()).sniperBidding();
   }
 }
