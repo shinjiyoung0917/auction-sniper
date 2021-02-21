@@ -25,6 +25,8 @@ public class Main {
   public static final String MAIN_WINDOW_NAME = "Auction Sniper";
 
   private MainWindow ui;
+  @SuppressWarnings("unused")
+  private Chat notToBeGCd;
 
   public Main() throws InvocationTargetException, InterruptedException {
     startUserInterface();
@@ -32,17 +34,22 @@ public class Main {
 
   public static void main(String... args) throws InvocationTargetException, InterruptedException, XMPPException {
     Main main = new Main();
-    XMPPConnection connection = connectTo(args[ARG_HOSTNAME], args[ARG_USERNAME], args[ARG_PASSWORD]);
+    main.joinAuction(
+        connection(args[ARG_HOSTNAME], args[ARG_USERNAME], args[ARG_PASSWORD]),
+        args[ARG_ITEM_ID]);
+  }
+
+  private void joinAuction(XMPPConnection connection, String itemId) throws XMPPException {
     Chat chat = connection.getChatManager().createChat(
-        auctionId(args[ARG_ITEM_ID], connection),
-        (aChat, message) -> {
-          // 아직 아무것도 없다.
-        }
+        auctionId(itemId, connection),
+        (aChat, message) -> SwingUtilities.invokeLater(() -> ui.showStatus(MainWindow.STATUS_LOST))
     );
+    this.notToBeGCd = chat;
+
     chat.sendMessage(new Message());
   }
 
-  private static XMPPConnection connectTo(String hostname, String username, String password) throws XMPPException {
+  private static XMPPConnection connection(String hostname, String username, String password) throws XMPPException {
     XMPPConnection connection = new XMPPConnection(hostname);
     connection.connect();
     connection.login(username, password, AUCTION_RESOURCE);

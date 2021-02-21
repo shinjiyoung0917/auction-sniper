@@ -1,5 +1,7 @@
 package auctionsniper;
 
+import auctionsniper.ui.MainWindow;
+
 public class ApplicationRunner {
 
   public static final String SNIPER_ID = "sniper";
@@ -21,11 +23,11 @@ public class ApplicationRunner {
     thread.setDaemon(true);
     thread.start();
     driver = new AuctionSniperDriver(1_000);
-    driver.showsSniperStatus(SniperStatus.STATUS_JOINING);
+    driver.showsSniperStatus(MainWindow.STATUS_JOINING);
   }
 
   public void showsSniperHasLostAuction() {
-    driver.showsSniperStatus(SniperStatus.STATUS_LOST);
+    driver.showsSniperStatus(MainWindow.STATUS_LOST);
   }
 
   public void stop() {
