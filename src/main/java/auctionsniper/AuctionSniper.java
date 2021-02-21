@@ -1,6 +1,6 @@
 package auctionsniper;
 
-public class AuctionSniper {
+public class AuctionSniper implements AuctionEventListener {
 
   private final SniperListener sniperListener;
 
@@ -8,7 +8,13 @@ public class AuctionSniper {
     this.sniperListener = sniperListener;
   }
 
-  public void auctionClosed() {
+  @Override
+  public void currentPrice(int price, int increment) {
+    // TODO: 자동 생성된 메서드 스텁.
+  }
 
+  @Override
+  public void auctionClosed() {
+    sniperListener.sniperLost();
   }
 }
