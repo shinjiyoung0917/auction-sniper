@@ -1,8 +1,6 @@
 package auctionsniper;
 
-public class AuctionEventListener {
+public interface AuctionEventListener {
 
-  public void auctionClosed() {
-
-  }
+  void auctionClosed();
 }

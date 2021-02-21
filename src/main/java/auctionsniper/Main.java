@@ -12,7 +12,7 @@ import org.jivesoftware.smack.XMPPException;
 
 import auctionsniper.ui.MainWindow;
 
-public class Main {
+public class Main implements AuctionEventListener {
 
   private static final int ARG_HOSTNAME = 0;
   private static final int ARG_USERNAME = 1;
@@ -43,15 +43,19 @@ public class Main {
         args[ARG_ITEM_ID]);
   }
 
+  @Override
+  public void auctionClosed() {
+    SwingUtilities.invokeLater(() -> ui.showStatus(MainWindow.STATUS_LOST));
+  }
+
   private void joinAuction(XMPPConnection connection, String itemId) throws XMPPException {
     disconnectWhenUICloses(connection);
     Chat chat = connection.getChatManager().createChat(
         auctionId(itemId, connection),
-        (aChat, message) -> SwingUtilities.invokeLater(() -> ui.showStatus(MainWindow.STATUS_LOST))
-    );
-    this.notToBeGCd = chat;
+        new AuctionMessageTranslator(this));
 
     chat.sendMessage(JOIN_COMMAND_FORMAT);
+    this.notToBeGCd = chat;
   }
 
   private void disconnectWhenUICloses(final XMPPConnection connection) {
