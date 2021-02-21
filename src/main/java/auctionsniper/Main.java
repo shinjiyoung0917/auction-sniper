@@ -7,7 +7,6 @@ import javax.swing.*;
 import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
-import org.jivesoftware.smack.packet.Message;
 
 import auctionsniper.ui.MainWindow;
 
@@ -21,6 +20,9 @@ public class Main {
   public static final String AUCTION_RESOURCE = "Auction";
   public static final String ITEM_ID_AS_LOGIN = "auction-%s";
   public static final String AUCTION_ID_FORMAT = ITEM_ID_AS_LOGIN + "@%s/" + AUCTION_RESOURCE;
+
+  public static final String JOIN_COMMAND_FORMAT = "";
+  public static final String BID_COMMAND_FORMAT = "SOLVersion: 1.1; Command: BID, Price: %d;";
 
   public static final String MAIN_WINDOW_NAME = "Auction Sniper";
 
@@ -46,7 +48,7 @@ public class Main {
     );
     this.notToBeGCd = chat;
 
-    chat.sendMessage(new Message());
+    chat.sendMessage(JOIN_COMMAND_FORMAT);
   }
 
   private static XMPPConnection connection(String hostname, String username, String password) throws XMPPException {

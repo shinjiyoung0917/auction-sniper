@@ -2,14 +2,19 @@ package auctionsniper;
 
 import org.jivesoftware.smack.XMPPException;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 
+@TestMethodOrder(OrderAnnotation.class)
 public class AuctionSniperEndToEndTest {
 
   private final FakeAuctionServer auction = new FakeAuctionServer("item-54321");
   private final ApplicationRunner application = new ApplicationRunner();
 
   @Test
+  @Order(1)
   void sniperJoinsAuctionUntilAuctionCloses() throws XMPPException, InterruptedException {
     /*
     1. 경매에서 품목을 판매하고
@@ -20,17 +25,18 @@ public class AuctionSniperEndToEndTest {
      */
     auction.startSellingItem();
     application.startBiddingIn(auction);
-    auction.hasReceivedJoinRequestFromSniper();
+    auction.hasReceivedJoinRequestFrom(ApplicationRunner.SNIPER_XMPP_ID);
     auction.announceClosed();
     application.showsSniperHasLostAuction();
   }
 
   @Test
+  @Order(2)
   void sniperMakesAHigherBidButLoses() throws XMPPException, InterruptedException {
     auction.startSellingItem();
 
     application.startBiddingIn(auction);
-    auction.hasReceivedJoinRequestFromSniper();
+    auction.hasReceivedJoinRequestFrom(ApplicationRunner.SNIPER_XMPP_ID);
 
     auction.reportPrice(1000, 98, "other bidder");
     application.hasShownSniperIsBidding();

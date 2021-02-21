@@ -3,6 +3,7 @@ package auctionsniper;
 import static org.assertj.core.api.Assertions.*;
 import static org.hamcrest.Matchers.*;
 
+import org.assertj.core.api.Condition;
 import org.assertj.core.api.HamcrestCondition;
 import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.XMPPConnection;
@@ -45,14 +46,22 @@ public class FakeAuctionServer {
             price, increment, bidder));
   }
 
-  public void hasReceivedJoinRequestFromSniper() throws InterruptedException {
-    messageListener.receivesAMessage(new HamcrestCondition<>(is(anything())));
+  public void hasReceivedJoinRequestFrom(String sniperId) throws InterruptedException {
+    receivesAMessageMatching(
+        sniperId,
+        new HamcrestCondition<>(equalTo(Main.JOIN_COMMAND_FORMAT)));
   }
 
   public void hasReceivedBid(int bid, String sniperId) throws InterruptedException {
+    receivesAMessageMatching(
+        sniperId,
+        new HamcrestCondition<>(equalTo(String.format(Main.BID_COMMAND_FORMAT, bid))));
+  }
+
+  private void receivesAMessageMatching(String sniperId, Condition<? super String> condition)
+      throws InterruptedException {
+    messageListener.receivesAMessage(condition);
     assertThat(currentChat.getParticipant()).isEqualTo(sniperId);
-    messageListener.receivesAMessage(
-        new HamcrestCondition<>(equalTo(String.format("SOLVersion: 1.1; Command: BID, Price: %d;", bid))));
   }
 
   public void announceClosed() throws XMPPException {
