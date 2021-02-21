@@ -41,3 +41,18 @@
 - 여러 품목
 - 사용자 인터페이스를 통해 품목을 추가
 - 매매 지시 지정 가격에서 입찰을 중단
+
+## 실행환경 구성
+
+### 로컬 XMPP 브로커 구성
+
+- [웹 문서](https://edgevpn.io/openfiredocker/) 참고
+- Docker 사용하여 openfire 컨테이너 구동
+
+```shell
+docker run --name openfire -d -p 9090:9090 -p 5222:5222  quantumobject/docker-openfire
+```
+
+- `localhost:9090` 접속하여 로컬 XMPP 브로커 설정 진행
+    - 위 웹 문서 참고하여 기본 설정 및 계정 생성 진행.
+    - 책 p.108에 나와있는 계정, 비밀번호 추가한다.

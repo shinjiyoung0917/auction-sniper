@@ -10,8 +10,15 @@ repositories {
 }
 
 dependencies {
+    implementation 'org.igniterealtime.smack:smack:3.2.1'
+    implementation 'org.igniterealtime.smack:smackx:3.2.1'
+
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+
+    testImplementation 'org.hamcrest:hamcrest:2.2'
+    testImplementation 'org.assertj:assertj-core:3.11.1'
+    testImplementation files('lib/windowlicker-core-DEV.jar', 'lib/windowlicker-swing-DEV.jar')
 }
 
 test {
