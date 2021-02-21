@@ -6,6 +6,7 @@ import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.packet.Message;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -17,7 +18,8 @@ public class AuctionMessageTranslatorTest {
   @Mock
   private AuctionEventListener lister;
 
-  private final AuctionMessageTranslator translator = new AuctionMessageTranslator();
+  @InjectMocks
+  private AuctionMessageTranslator translator;
 
   @Test
   void notifiesAuctionClosedWhenCloseMessageReceived() {
