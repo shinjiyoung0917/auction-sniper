@@ -39,4 +39,11 @@ class AuctionSniperTest {
     verify(auction, times(1)).bid(price + increment);
     verify(sniperListener, atLeastOnce()).sniperBidding();
   }
+  
+  @Test
+  void reports_is_winning_when_current_price_comes_from_sniper() {
+    sniper.currentPrice(123, 45, PriceSource.FromSniper);
+
+    verify(sniperListener, atLeastOnce()).sniperWinning();
+  }
 }
