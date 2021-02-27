@@ -66,7 +66,19 @@ class AuctionSniperTest {
     verify(sniperListener, atLeastOnce()).sniperWinning();
   }
 
+  @Test
+  void reports_won_if_auction_closes_when_winning() {
+    sniper.currentPrice(123, 45, PriceSource.FromSniper);
+    sniper.auctionClosed();
+
+    ignoreStubs(auction);
+
+    sniperListener.sniperWinning();
+    sniperState = SniperState.WINNING;
+    verify(sniperListener, times(1)).sniperWon();
+  }
+
   public enum SniperState {
-    IDLE, BIDDING;
+    IDLE, BIDDING, WINNING;
   }
 }
