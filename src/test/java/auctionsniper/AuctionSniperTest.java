@@ -22,11 +22,30 @@ class AuctionSniperTest {
   @InjectMocks
   private AuctionSniper sniper;
 
+  private SniperState sniperState = SniperState.IDLE;
+
   @Test
-  void reports_lost_when_auction_closes() {
+  void reports_lost_if_auction_closes_immediately() {
     sniper.auctionClosed();
 
     verify(sniperListener, times(1)).sniperLost();
+  }
+
+  @Test
+  void reports_lost_if_auction_closes_when_bidding() {
+    sniper.currentPrice(123, 45, PriceSource.FromOtherBidder);
+    sniper.auctionClosed();
+
+    ignoreStubs(auction);
+
+    sniperListener.sniperBidding();
+    sniperState = SniperState.BIDDING;
+    verify(sniperListener, times(1)).sniperLost();
+
+    //allowing(sniperListener).sniperBidding();
+    //then(sniperState.is("bidding"));
+    //verify(sniperListener, times(1)).sniperLost();
+    //when(sniperState.is("bidding"));
   }
 
   @Test
@@ -45,5 +64,9 @@ class AuctionSniperTest {
     sniper.currentPrice(123, 45, PriceSource.FromSniper);
 
     verify(sniperListener, atLeastOnce()).sniperWinning();
+  }
+
+  public enum SniperState {
+    IDLE, BIDDING;
   }
 }
