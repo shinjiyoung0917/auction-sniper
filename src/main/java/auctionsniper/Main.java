@@ -28,6 +28,8 @@ public class Main {
 
   public static final String MAIN_WINDOW_NAME = "Auction Sniper";
 
+  private static final String SNIPER_ID = "sniper";
+
   private MainWindow ui;
   @SuppressWarnings("unused")
   private Chat notToBeGCd;
@@ -50,7 +52,8 @@ public class Main {
     this.notToBeGCd = chat;
 
     Auction auction = new XMPPAuction(chat);
-    chat.addMessageListener(new AuctionMessageTranslator(new AuctionSniper(auction, new SniperStateDisplayer())));
+    chat.addMessageListener(new AuctionMessageTranslator(
+        new AuctionSniper(auction, new SniperStateDisplayer()), connection.getUser()));
     auction.join();
   }
 

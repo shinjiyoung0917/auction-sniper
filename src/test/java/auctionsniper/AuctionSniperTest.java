@@ -8,6 +8,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import auctionsniper.AuctionEventListener.PriceSource;
+
 @ExtendWith(MockitoExtension.class)
 class AuctionSniperTest {
 
@@ -32,7 +34,7 @@ class AuctionSniperTest {
     final int price = 1001;
     final int increment = 25;
 
-    sniper.currentPrice(price, increment);
+    sniper.currentPrice(price, increment, PriceSource.FromOtherBidder);
 
     verify(auction, times(1)).bid(price + increment);
     verify(sniperListener, atLeastOnce()).sniperBidding();
